@@ -3,7 +3,6 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
-        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -65,8 +64,8 @@
                                             <constraint firstAttribute="width" secondItem="ypN-fP-TqW" secondAttribute="height" multiplier="2:3" id="ixI-GL-2mN"/>
                                         </constraints>
                                         <color key="tintColor" systemColor="systemRedColor"/>
-                                        <state key="normal">
-                                            <imageReference key="image" image="heart.fill" catalog="system" symbolScale="large"/>
+                                        <state key="normal" image="heart.fill" catalog="system">
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
                                         </state>
                                         <connections>
                                             <action selector="likeButton:" destination="JZh-te-i1j" eventType="touchUpInside" id="gC5-XV-aJL"/>

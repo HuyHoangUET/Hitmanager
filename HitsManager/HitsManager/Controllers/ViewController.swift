@@ -124,10 +124,11 @@ extension ViewController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? HitCollectionViewCell else { return HitCollectionViewCell()}
         cell.delegate = self
         cell.showLoadingIndicator()
+        guard let hitId = viewModel.hits[safeIndex: indexPath.row]?.id else { return HitCollectionViewCell() }
+        cell.handleLikeButton(indexPath: indexPath, hitId: hitId)
         viewModel.getImageForCell(indexPath: indexPath) { (image) in
             cell.setImageForCell(image: image, id: hit.id, url: hit.imageURL, imageWidth: hit.imageWidth, imageHeight: hit.imageHeight, userImageUrl: hit.userImageUrl, username: hit.username)
                 cell.loadingIndicator.stopAnimating()
-                self.handleLikeButton(cell: cell , indexPath: indexPath)
         }
         return cell
     }
