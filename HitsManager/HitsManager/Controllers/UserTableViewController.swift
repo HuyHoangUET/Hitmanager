@@ -15,6 +15,7 @@ class UserTableViewController: UIViewController {
     
     private var didLikeHits: [DidLikeHit] = []
     var userViewModel: UserViewModel?
+    var didDislikeImagesId: Set<Int> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +32,13 @@ class UserTableViewController: UIViewController {
         if didLikeHits != newDidLikeHits {
             didLikeHits = newDidLikeHits
             hitTableView.reloadData()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        for id in didDislikeImagesId {
+            DidLikeHit.deleteAnObject(id: id)
         }
     }
 }
@@ -59,8 +67,15 @@ extension UserTableViewController {
         }
         guard let cell = hitTableView.dequeueReusableCell(withIdentifier: "cell") as? HitTableViewCell else { return HitTableViewCell()}
         guard let hit = didLikeHits[safeIndex: indexPath.row] else {return HitTableViewCell()}
+        cell.setItem(hit: hit)
         cell.setHeightOfHitImageView(imageWidth: CGFloat(hit.imageWidth), imageHeight: CGFloat(hit.imageHeight))
         // user imageview
+        cell.delegate = self
+        if didDislikeImagesId.isSuperset(of: [hit.id]){
+            cell.likeButton.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        } else {
+            cell.likeButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        }
         self.userViewModel?.dataManager.getImage(url: didLikeHits[indexPath.row].userImageUrl) { (image) in
             cell.setImageForUserImageView(image: image)
             cell.setBoundsToUserImage()
@@ -83,5 +98,15 @@ extension UserTableViewController {
                 self.userViewModel!.isDisplayCellAtChosenIndexPath = false
             }
         }
+    }
+}
+
+extension UserTableViewController: UserTableViewCellDelegate {
+    func didLikeImage(id: Int) {
+        didDislikeImagesId.remove(id)
+    }
+    
+    func didDisLikeImage(id: Int) {
+        didDislikeImagesId.insert(id)
     }
 }
