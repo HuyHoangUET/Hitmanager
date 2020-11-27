@@ -43,6 +43,15 @@ class HitCollectionViewCell: UICollectionViewCell {
         loadingIndicator.startAnimating()
     }
     
+    func handleLikeButton(indexPath: IndexPath, hitId: Int) {
+        let listDidLikeImageId = DidLikeHit.getListId()
+        if listDidLikeImageId.isSuperset(of: [hitId]) {
+            likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+        } else {
+            likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+        }
+    }
+    
     // MARK: - action
     @IBAction func likeButton(_ sender: UIButton) {
         let heartImage = UIImage(systemName: "heart.fill")

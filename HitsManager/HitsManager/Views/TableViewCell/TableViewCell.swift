@@ -20,6 +20,7 @@ class HitTableViewCell: UITableViewCell {
     
     weak var delegate: UserTableViewCellDelegate?
     private var item = Item()
+    private var scale = UIImage.SymbolConfiguration(scale: .large)
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -55,14 +56,22 @@ class HitTableViewCell: UITableViewCell {
     func setImageForUserImageView(image: UIImage) {
         userImageView.image = image
     }
+    
+    func handleLikeButton(hit: DidLikeHit, didDislikeImagesId: Set<Int>) {
+        if didDislikeImagesId.isSuperset(of: [hit.id]){
+            likeButton.setImage(UIImage(systemName: "heart", withConfiguration: scale), for: .normal)
+        } else {
+            likeButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: scale), for: .normal)
+        }
+    }
     // MARK: - action
     @IBAction func likeButton(_ sender: Any) {
-        let heartImage = UIImage(systemName: "heart")
+        let heartImage = UIImage(systemName: "heart", withConfiguration: scale)
         if likeButton.currentImage != heartImage {
             likeButton.setImage(heartImage, for: .normal)
             delegate?.didDisLikeImage(id: item.id)
         } else {
-            likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            likeButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: scale), for: .normal)
             delegate?.didLikeImage(id: item.id)
         }
     }

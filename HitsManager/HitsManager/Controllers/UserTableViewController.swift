@@ -69,18 +69,16 @@ extension UserTableViewController {
         guard let hit = didLikeHits[safeIndex: indexPath.row] else {return HitTableViewCell()}
         cell.setItem(hit: hit)
         cell.setHeightOfHitImageView(imageWidth: CGFloat(hit.imageWidth), imageHeight: CGFloat(hit.imageHeight))
-        // user imageview
         cell.delegate = self
-        if didDislikeImagesId.isSuperset(of: [hit.id]){
-            cell.likeButton.setImage(UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
-        } else {
-            cell.likeButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
-        }
+        cell.handleLikeButton(hit: hit, didDislikeImagesId: didDislikeImagesId)
+        
+        // user imageview
         self.userViewModel?.dataManager.getImage(url: didLikeHits[indexPath.row].userImageUrl) { (image) in
             cell.setImageForUserImageView(image: image)
             cell.setBoundsToUserImage()
             cell.usernameLabel.text = self.didLikeHits[indexPath.row].username
         }
+        
         // hit imageview
         self.userViewModel?.dataManager.getImage(url: hit.url) { (image) in
             cell.setImageForHitImageView(image: image)
