@@ -14,17 +14,19 @@ class UserTableViewController: UIViewController {
     @IBOutlet weak var hitTableView: UITableView!
     
     private var didLikeHits: [DidLikeHit] = []
-    var userViewModel: UserViewModel? = nil
+    var userViewModel: UserViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         didLikeHits = DidLikeHit.getListDidLikeHit()
-        
         hitTableView.register(UINib.init(nibName: "TableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
+        scrollToRow()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
         let newDidLikeHits = DidLikeHit.getListDidLikeHit()
         if didLikeHits != newDidLikeHits {
             didLikeHits = newDidLikeHits
@@ -46,14 +48,6 @@ extension UserTableViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = initHittableViewCell(indexPath: indexPath)
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard userViewModel != nil else { return }
-        if (userViewModel!.isDisplayCellAtChosenIndexPath) {
-            hitTableView.scrollToRow(at: userViewModel?.chosenIndexPath ?? IndexPath(), at: .top, animated: true)
-            userViewModel!.isDisplayCellAtChosenIndexPath = false
-        }
     }
 }
 
@@ -77,5 +71,17 @@ extension UserTableViewController {
             cell.setImageForHitImageView(image: image)
         }
         return cell
+    }
+}
+
+extension UserTableViewController {
+    func scrollToRow(){
+        DispatchQueue.main.async {
+            guard self.userViewModel != nil else { return }
+            if self.userViewModel!.isDisplayCellAtChosenIndexPath {
+                self.hitTableView.scrollToRow(at: self.userViewModel?.chosenIndexPath ?? IndexPath(), at: .top, animated: true)
+                self.userViewModel!.isDisplayCellAtChosenIndexPath = false
+            }
+        }
     }
 }
