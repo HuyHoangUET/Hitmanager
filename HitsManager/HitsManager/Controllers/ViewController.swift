@@ -27,6 +27,11 @@ class ViewController: UIViewController {
             self.collectionView.reloadData()
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        collectionView.reloadData()
+    }
 }
 
 // Create cell
