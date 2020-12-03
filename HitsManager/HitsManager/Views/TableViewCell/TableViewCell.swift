@@ -56,7 +56,8 @@ class HitTableViewCell: UITableViewCell {
         let options = ImageLoadingOptions(
             placeholder: UIImage(systemName: "person.circle")
             )
-        let request = ImageRequest(url: URL(string: hit.userImageUrl)!, processors: [ImageProcessors.Circle()])
+        let request = ImageRequest(url: URL(string: hit.userImageUrl)!,
+                                   processors: [ImageProcessors.Circle()])
         Nuke.loadImage(with: request, options: options, into: userImageView)
     }
     

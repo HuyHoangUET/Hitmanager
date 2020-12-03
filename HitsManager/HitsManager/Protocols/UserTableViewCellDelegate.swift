@@ -9,6 +9,6 @@ import Foundation
 import UIKit
 
 protocol UserTableViewCellDelegate: class {
-    func didDisLikeImage(id: Int)
     func didLikeImage(id: Int)
+    func didDisLikeImage(id: Int)
 }

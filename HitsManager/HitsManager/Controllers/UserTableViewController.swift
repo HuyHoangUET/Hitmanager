@@ -21,7 +21,8 @@ class UserTableViewController: UIViewController {
         super.viewDidLoad()
         
         didLikeHits = userViewModel?.getDidLikeHit(didLikeHits: DidLikeHit.getListDidLikeHit()) ?? []
-        hitTableView.register(UINib.init(nibName: "TableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
+        hitTableView.register(UINib.init(nibName: "TableViewCell", bundle: nil),
+                              forCellReuseIdentifier: "cell")
         scrollToRow()
     }
     
@@ -67,7 +68,9 @@ extension UserTableViewController {
         guard userViewModel != nil else {
             return HitTableViewCell()
         }
-        guard let cell = hitTableView.dequeueReusableCell(withIdentifier: "cell") as? HitTableViewCell else { return HitTableViewCell()}
+        guard let cell = hitTableView.dequeueReusableCell(withIdentifier: "cell") as? HitTableViewCell else {
+            return HitTableViewCell()
+        }
         guard let hit = didLikeHits[safeIndex: indexPath.row] else {return HitTableViewCell()}
         cell.hit = Hit(id: hit.id,
                        imageUrl: hit.imageURL,
@@ -75,7 +78,8 @@ extension UserTableViewController {
                        imageHeight: CGFloat(hit.imageHeight),
                        userImageUrl: hit.userImageUrl,
                        username: hit.username)
-        cell.setHeightOfHitImageView(imageWidth: CGFloat(hit.imageWidth), imageHeight: CGFloat(hit.imageHeight))
+        cell.setHeightOfHitImageView(imageWidth: CGFloat(hit.imageWidth),
+                                     imageHeight: CGFloat(hit.imageHeight))
         cell.delegate = self
         cell.handleLikeButton(hit: hit, didDislikeImagesId: didDislikeImagesId)
         
@@ -93,7 +97,9 @@ extension UserTableViewController {
         DispatchQueue.main.async {
             guard self.userViewModel != nil else { return }
             if self.userViewModel!.isDisplayCellAtChosenIndexPath {
-                self.hitTableView.scrollToRow(at: self.userViewModel?.chosenIndexPath ?? IndexPath(), at: .top, animated: true)
+                self.hitTableView.scrollToRow(at: self.userViewModel?.chosenIndexPath ?? IndexPath(),
+                                              at: .top,
+                                              animated: true)
                 self.userViewModel!.isDisplayCellAtChosenIndexPath = false
             }
         }
