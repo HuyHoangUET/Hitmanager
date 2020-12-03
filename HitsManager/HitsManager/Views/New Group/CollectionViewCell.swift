@@ -24,6 +24,7 @@ class HitCollectionViewCell: UICollectionViewCell {
     }
     
     func setImage() {
+        guard hit.imageURL != "" else { return }
         let options = ImageLoadingOptions(
             placeholder: UIImage(named: "placeholder")
             )
