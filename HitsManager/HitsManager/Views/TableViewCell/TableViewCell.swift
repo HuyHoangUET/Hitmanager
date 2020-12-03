@@ -40,7 +40,7 @@ class HitTableViewCell: UITableViewCell {
         let ratio = imageHeight / imageWidth
         let widthOfHitImageView = hitImageView.frame.width
         let heightOfHitImageView = widthOfHitImageView * ratio
-        self.heightOfHitImageView.constant = heightOfHitImageView
+        self.heightOfHitImageView.constant = heightOfHitImageView;
     }
     
     func setImageForHitImageView() {
@@ -81,6 +81,7 @@ class HitTableViewCell: UITableViewCell {
             delegate?.didDisLikeImage(id: hit.id)
         } else {
             likeButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: scale), for: .normal)
+            likeButton.tintColor = .black
             delegate?.didLikeImage(id: hit.id)
         }
     }
