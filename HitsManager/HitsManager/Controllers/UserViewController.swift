@@ -96,7 +96,7 @@ extension UserViewController {
         guard let cell = self.imageCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? HitCollectionViewCell else { return HitCollectionViewCell()}
         cell.showLoadingIndicator()
         cell.likeButton.isHidden = true
-        self.userViewModel.dataManager.getImage(url: didLikeHits[indexPath.row].url) { (image) in
+        self.userViewModel.dataManager.getImage(url: didLikeHits[indexPath.row].url) { image in
             cell.imageView.image = image
             cell.loadingIndicator.stopAnimating()
         }

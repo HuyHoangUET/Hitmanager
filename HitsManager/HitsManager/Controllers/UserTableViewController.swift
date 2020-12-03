@@ -67,22 +67,21 @@ extension UserTableViewController {
         }
         guard let cell = hitTableView.dequeueReusableCell(withIdentifier: "cell") as? HitTableViewCell else { return HitTableViewCell()}
         guard let hit = didLikeHits[safeIndex: indexPath.row] else {return HitTableViewCell()}
-        cell.setItem(hit: hit)
+        cell.hit = Hit(id: hit.id,
+                       imageUrl: hit.url,
+                       imageWidth: CGFloat(hit.imageWidth),
+                       imageHeight: CGFloat(hit.imageHeight),
+                       userImageUrl: hit.userImageUrl,
+                       username: hit.username)
         cell.setHeightOfHitImageView(imageWidth: CGFloat(hit.imageWidth), imageHeight: CGFloat(hit.imageHeight))
         cell.delegate = self
         cell.handleLikeButton(hit: hit, didDislikeImagesId: didDislikeImagesId)
         
         // user imageview
-        self.userViewModel?.dataManager.getImage(url: didLikeHits[indexPath.row].userImageUrl) { (image) in
-            cell.setImageForUserImageView(image: image)
-            cell.setBoundsToUserImage()
-            cell.usernameLabel.text = self.didLikeHits[indexPath.row].username
-        }
+        cell.setImageForUserView()
         
         // hit imageview
-        self.userViewModel?.dataManager.getImage(url: hit.url) { (image) in
-            cell.setImageForHitImageView(image: image)
-        }
+        cell.setImageForHitImageView()
         return cell
     }
 }

@@ -15,13 +15,15 @@ class ViewModel {
     var hits: [Hit] = []
     var sellectedCell = IndexPath()
     var curentPage = 1
-    let imageCache = NSCache<AnyObject, AnyObject>()
     
     // Get data from api
     func getHitsByPage(completion: @escaping ([Hit]) -> ()) {
-        dataManager.get(url: apiURL + "&page=\(curentPage)") {[weak self] (data) in
+        let url = apiURL + "&page=\(curentPage)"
+        dataManager.get(url: url) {[weak self] data in
             do {
+                print(url)
                 let result = try JSONDecoder().decode(Result.self, from: data)
+                print("\(result)")
                 self?.hits += result.hits
                 completion(self?.hits ?? [])
             } catch {
@@ -36,22 +38,6 @@ class ViewModel {
             getHitsByPage() { (hits) in
                 completion(self.hits)
             }
-        }
-    }
-    
-    func cacheImage(image: UIImage, idImage: Int) {
-        imageCache.setObject(image, forKey: "\(idImage)" as NSString)
-    }
-    
-    func getImageForCell(indexPath: IndexPath, completion: @escaping (UIImage) -> ()) {
-        let image = imageCache.object(forKey: "\(hits[indexPath.row].id)" as NSString) as? UIImage
-        if image == nil {
-            dataManager.getImage(url: hits[indexPath.row].imageURL) { (image) in
-                self.imageCache.setObject(image, forKey: "\(self.hits[indexPath.row].id)" as NSString)
-                completion(image)
-            }
-        } else {
-            completion(image ?? UIImage())
         }
     }
 }

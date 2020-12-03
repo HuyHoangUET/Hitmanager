@@ -28,7 +28,7 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aGI-bE-UG3">
-                                        <rect key="frame" x="69" y="0.0" width="345" height="52"/>
+                                        <rect key="frame" x="59" y="0.0" width="355" height="52"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -40,7 +40,7 @@
                                     <constraint firstAttribute="trailing" secondItem="aGI-bE-UG3" secondAttribute="trailing" id="27G-i5-u6E"/>
                                     <constraint firstItem="aGI-bE-UG3" firstAttribute="height" secondItem="rd8-a5-61L" secondAttribute="height" id="3hl-cJ-9Z3"/>
                                     <constraint firstAttribute="width" secondItem="rd8-a5-61L" secondAttribute="height" multiplier="8" id="A80-Kx-9Gc"/>
-                                    <constraint firstItem="aGI-bE-UG3" firstAttribute="width" secondItem="rd8-a5-61L" secondAttribute="width" multiplier="5/6" id="Kvd-dN-JSa"/>
+                                    <constraint firstItem="aGI-bE-UG3" firstAttribute="width" secondItem="rd8-a5-61L" secondAttribute="width" multiplier="6/7" id="Kvd-dN-JSa"/>
                                     <constraint firstAttribute="bottom" secondItem="aGI-bE-UG3" secondAttribute="bottom" id="Lbo-8k-uPX"/>
                                     <constraint firstItem="LmR-Vd-ilk" firstAttribute="height" secondItem="rd8-a5-61L" secondAttribute="height" constant="-6" id="PYy-az-8R4"/>
                                     <constraint firstItem="LmR-Vd-ilk" firstAttribute="top" secondItem="rd8-a5-61L" secondAttribute="top" constant="3" id="QIx-Fr-77X"/>

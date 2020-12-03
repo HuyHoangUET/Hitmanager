@@ -43,7 +43,7 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Directory" image="square.grid.2x2" catalog="system" id="XQe-xw-5Df"/>
-                    <navigationItem key="navigationItem" id="hCz-Be-j28"/>
+                    <navigationItem key="navigationItem" title="Directory" id="hCz-Be-j28"/>
                     <connections>
                         <outlet property="collectionView" destination="bgj-Vy-Ghu" id="HFT-ji-CVg"/>
                         <outlet property="mainView" destination="8bC-Xf-vdC" id="yKv-bc-Xpk"/>

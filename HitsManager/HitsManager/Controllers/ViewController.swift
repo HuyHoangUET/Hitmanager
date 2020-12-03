@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Nuke
 
 class ViewController: UIViewController {
     // MARK: - outlet
@@ -22,6 +23,7 @@ class ViewController: UIViewController {
         collectionView.register(UINib.init(nibName: "CollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "cell")
         
         viewModel.getHitsByPage() { (hits) in
+            print("did get hits")
             self.collectionView.reloadData()
         }
     }
@@ -76,6 +78,8 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         } else {
             viewModel.sellectedCell = IndexPath()
         }
+        print(indexPath.row)
+        print(viewModel.hits[indexPath.row])
         collectionView.performBatchUpdates(nil, completion: nil)
     }
     
@@ -88,7 +92,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
 extension ViewController: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         viewModel.getHitsInNextPage(indexPaths: indexPaths) { (hits) in
-            collectionView.reloadData()
+            collectionView.reloadItems(at: indexPaths)
         }
     }
 }
@@ -96,10 +100,13 @@ extension ViewController: UICollectionViewDataSourcePrefetching {
 // Handle like image
 extension ViewController: HitCollectionViewDelegate {
     
-    func didLikeImage(id: Int, url: String, imageWidth: CGFloat, imageHeight: CGFloat, userImageUrl: String, username: String) {
-        let width = Float(imageWidth)
-        let height = Float(imageHeight)
-        DidLikeHit.addAnObject(id: id, url: url, imageWidth: width, imageHeight: height, userImageUrl: userImageUrl, username: username)
+    func didLikeImage(hit: Hit) {
+        DidLikeHit.addAnObject(id: hit.id,
+                               url: hit.imageURL,
+                               imageWidth: Float(hit.imageWidth),
+                               imageHeight: Float(hit.imageHeight),
+                               userImageUrl: hit.userImageUrl,
+                               username: hit.username)
     }
     
     func didDisLikeImage(id: Int) {
@@ -122,14 +129,12 @@ extension ViewController {
     func initHitCollectionViewCell(indexPath: IndexPath) -> HitCollectionViewCell {
         guard let hit = viewModel.hits[safeIndex: indexPath.row] else { return HitCollectionViewCell()}
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? HitCollectionViewCell else { return HitCollectionViewCell()}
-        cell.delegate = self
         cell.showLoadingIndicator()
+        cell.delegate = self
         guard let hitId = viewModel.hits[safeIndex: indexPath.row]?.id else { return HitCollectionViewCell() }
         cell.handleLikeButton(indexPath: indexPath, hitId: hitId)
-        viewModel.getImageForCell(indexPath: indexPath) { (image) in
-            cell.setImageForCell(image: image, id: hit.id, url: hit.imageURL, imageWidth: hit.imageWidth, imageHeight: hit.imageHeight, userImageUrl: hit.userImageUrl, username: hit.username)
-                cell.loadingIndicator.stopAnimating()
-        }
+        cell.hit = hit
+        cell.setImage()
         return cell
     }
 }
