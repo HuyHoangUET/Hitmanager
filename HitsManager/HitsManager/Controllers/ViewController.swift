@@ -20,7 +20,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.prefetchDataSource = self
-        collectionView.register(UINib.init(nibName: "CollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "cell")
+        collectionView.register(UINib.init(nibName: "CollectionViewCell", bundle: nil),
+                                forCellWithReuseIdentifier: "cell")
         
         viewModel.getHitsByPage() { (hits) in
             print("did get hits")
@@ -36,11 +37,13 @@ class ViewController: UIViewController {
 
 // Create cell
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         viewModel.hits.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = initHitCollectionViewCell(indexPath: indexPath)
         return cell
     }
@@ -58,7 +61,8 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         if viewModel.sellectedCell == indexPath {
-            return sizeOfItem.getSizeForDidSellectItem(imageWidth: viewModel.hits[indexPath.row].imageWidth, imageHeight: viewModel.hits[indexPath.row].imageHeight)
+            return sizeOfItem.getSizeForDidSellectItem(imageWidth: viewModel.hits[indexPath.row].imageWidth,
+                                                       imageHeight: viewModel.hits[indexPath.row].imageHeight)
         }
         
         return sizeOfItem.getSizeForItem()
@@ -77,7 +81,8 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
     
     // Sellect cell
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        didSelectItemAt indexPath: IndexPath) {
         if viewModel.sellectedCell != indexPath {
             viewModel.sellectedCell = indexPath
         } else {
@@ -88,14 +93,16 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         collectionView.performBatchUpdates(nil, completion: nil)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        didDeselectItemAt indexPath: IndexPath) {
         viewModel.sellectedCell = IndexPath()
     }
 }
 
 // Load next page
 extension ViewController: UICollectionViewDataSourcePrefetching {
-    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+    func collectionView(_ collectionView: UICollectionView,
+                        prefetchItemsAt indexPaths: [IndexPath]) {
         viewModel.getHitsInNextPage(indexPaths: indexPaths) { (hits) in
             collectionView.reloadItems(at: indexPaths)
         }
@@ -106,12 +113,15 @@ extension ViewController: UICollectionViewDataSourcePrefetching {
 extension ViewController: HitCollectionViewDelegate {
     
     func didLikeImage(hit: Hit) {
-        DidLikeHit.addAnObject(id: hit.id,
-                               url: hit.imageURL,
-                               imageWidth: Float(hit.imageWidth),
-                               imageHeight: Float(hit.imageHeight),
-                               userImageUrl: hit.userImageUrl,
-                               username: hit.username)
+        let setDidLikeHitId = Set(DidLikeHit.getListId())
+        if !setDidLikeHitId.isSuperset(of: [hit.id]) {
+            DidLikeHit.addAnObject(id: hit.id,
+                                   url: hit.imageURL,
+                                   imageWidth: Float(hit.imageWidth),
+                                   imageHeight: Float(hit.imageHeight),
+                                   userImageUrl: hit.userImageUrl,
+                                   username: hit.username)
+        }
     }
     
     func didDisLikeImage(id: Int) {
@@ -133,7 +143,10 @@ extension ViewController: HitCollectionViewDelegate {
 extension ViewController {
     func initHitCollectionViewCell(indexPath: IndexPath) -> HitCollectionViewCell {
         guard let hit = viewModel.hits[safeIndex: indexPath.row] else { return HitCollectionViewCell()}
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? HitCollectionViewCell else { return HitCollectionViewCell()}
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell",
+                                                            for: indexPath) as? HitCollectionViewCell else {
+            return HitCollectionViewCell()
+        }
         cell.delegate = self
         guard let hitId = viewModel.hits[safeIndex: indexPath.row]?.id else { return HitCollectionViewCell() }
         cell.handleLikeButton(indexPath: indexPath, hitId: hitId)

@@ -14,12 +14,14 @@ class SizeOfCollectionViewItem {
     private let screenWidth = UIScreen.main.bounds.width
 
     func getCellWidth() -> CGFloat {
-        let cellWidth = screenWidth - (paddingSpace/CGFloat((numberOfItemsInRow - 1)))
+        let cellWidth = screenWidth - (paddingSpace/CGFloat(numberOfItemsInRow - 1))
         return cellWidth
     }
     
     func getInsetOfSection() -> UIEdgeInsets {
-        let insetOfSection = UIEdgeInsets(top: 3, left: paddingSpace/CGFloat(numberOfItemsInRow + 1), bottom: 10, right: paddingSpace/CGFloat(numberOfItemsInRow + 1))
+        let insetOfSection = UIEdgeInsets(top: 3,
+                                          left: paddingSpace/CGFloat(numberOfItemsInRow + 1),
+                                          bottom: 10, right: paddingSpace/CGFloat(numberOfItemsInRow + 1))
         return insetOfSection
     }
     

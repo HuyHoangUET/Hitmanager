@@ -25,7 +25,8 @@ class UserViewController: UIViewController{
         super.viewDidLoad()
         
         didLikeHits = userViewModel.getDidLikeHit(didLikeHits: DidLikeHit.getListDidLikeHit())
-        imageCollectionView.register(UINib.init(nibName: "CollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "cell")
+        imageCollectionView.register(UINib.init(nibName: "CollectionViewCell", bundle: nil),
+                                     forCellWithReuseIdentifier: "cell")
         customUserImage()
         customUsernameLabel()
     }
@@ -49,7 +50,8 @@ extension UserViewController: UICollectionViewDelegate, UICollectionViewDataSour
         return didLikeHits.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = initHitCollectionViewCell(indexPath: indexPath)
         return cell
     }
@@ -95,7 +97,10 @@ extension UserViewController {
 // Display collectionView cell
 extension UserViewController {
     func initHitCollectionViewCell(indexPath: IndexPath) -> HitCollectionViewCell {
-        guard let cell = self.imageCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? HitCollectionViewCell else { return HitCollectionViewCell()}
+        guard let cell = self.imageCollectionView.dequeueReusableCell(withReuseIdentifier: "cell",
+                                                                      for: indexPath) as? HitCollectionViewCell else {
+            return HitCollectionViewCell()
+        }
         cell.hit = didLikeHits[indexPath.row]
         cell.likeButton.isHidden = true
         cell.setImage()
