@@ -19,21 +19,23 @@ class UserViewController: UIViewController{
     
     private let userViewModel = UserViewModel()
     private let sizeOfItem = SizeOfCollectionViewItem()
-    private var didLikeHits: [DidLikeHit] = []
+    private var didLikeHits: [Hit] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        didLikeHits = DidLikeHit.getListDidLikeHit()
+        didLikeHits = userViewModel.getDidLikeHit(didLikeHits: DidLikeHit.getListDidLikeHit())
         imageCollectionView.register(UINib.init(nibName: "CollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "cell")
         customUserImage()
         customUsernameLabel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let newDidLikeHits = DidLikeHit.getListDidLikeHit()
+        let newDidLikeHits = userViewModel.getDidLikeHit(didLikeHits: DidLikeHit.getListDidLikeHit())
+        let setDidLikeHits = Set(didLikeHits)
+        let setNewDidLikeHits = Set(newDidLikeHits)
         
-        if didLikeHits != newDidLikeHits {
+        if setDidLikeHits != setNewDidLikeHits {
             didLikeHits = newDidLikeHits
             imageCollectionView.reloadData()
         }
@@ -94,12 +96,9 @@ extension UserViewController {
 extension UserViewController {
     func initHitCollectionViewCell(indexPath: IndexPath) -> HitCollectionViewCell {
         guard let cell = self.imageCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? HitCollectionViewCell else { return HitCollectionViewCell()}
-        cell.showLoadingIndicator()
+        cell.hit = didLikeHits[indexPath.row]
         cell.likeButton.isHidden = true
-        self.userViewModel.dataManager.getImage(url: didLikeHits[indexPath.row].url) { (image) in
-            cell.imageView.image = image
-            cell.loadingIndicator.stopAnimating()
-        }
+        cell.setImage()
         return cell
     }
 }

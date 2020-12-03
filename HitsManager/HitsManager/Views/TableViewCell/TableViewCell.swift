@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Nuke
 
 class HitTableViewCell: UITableViewCell {
     
@@ -19,13 +20,14 @@ class HitTableViewCell: UITableViewCell {
     @IBOutlet weak var heightOfHitImageView: NSLayoutConstraint!
     
     weak var delegate: UserTableViewCellDelegate?
-    private var item = Item()
-    private var scale = UIImage.SymbolConfiguration(scale: .large)
+    private let scale = UIImage.SymbolConfiguration(scale: .large)
+    var hit = Hit()
     
     override func prepareForReuse() {
         super.prepareForReuse()
         hitImageView.image = nil
         userImageView.image = nil
+        usernameLabel.text = ""
         likeButton.setImage(nil, for: .normal)
     }
     
@@ -40,24 +42,25 @@ class HitTableViewCell: UITableViewCell {
         let heightOfHitImageView = widthOfHitImageView * ratio
         self.heightOfHitImageView.constant = heightOfHitImageView
     }
-    func setImageForHitImageView(image: UIImage) {
-        hitImageView.image = image
+    
+    func setImageForHitImageView() {
+        let options = ImageLoadingOptions(
+            placeholder: UIImage(named: "placeholder")
+            )
+        Nuke.loadImage(with: URL(string: hit.imageURL)!, options: options, into: hitImageView)
     }
     
-    func setItem(hit: DidLikeHit) {
-        item.id = hit.id
-        item.imageURL = hit.url
-        item.imageHeight = CGFloat(hit.imageHeight)
-        item.imageWidth = CGFloat(hit.imageWidth)
-        item.username = hit.username
-        item.userImageUrl = hit.userImageUrl
+    func setImageForUserView() {
+        usernameLabel.text = hit.username
+        setBoundsToUserImage()
+        let options = ImageLoadingOptions(
+            placeholder: UIImage(systemName: "person.circle")
+            )
+        let request = ImageRequest(url: URL(string: hit.userImageUrl)!, processors: [ImageProcessors.Circle()])
+        Nuke.loadImage(with: request, options: options, into: userImageView)
     }
     
-    func setImageForUserImageView(image: UIImage) {
-        userImageView.image = image
-    }
-    
-    func handleLikeButton(hit: DidLikeHit, didDislikeImagesId: Set<Int>) {
+    func handleLikeButton(hit: Hit, didDislikeImagesId: Set<Int>) {
         if didDislikeImagesId.isSuperset(of: [hit.id]){
             likeButton.setImage(UIImage(systemName: "heart", withConfiguration: scale), for: .normal)
         } else {
@@ -69,10 +72,10 @@ class HitTableViewCell: UITableViewCell {
         let heartImage = UIImage(systemName: "heart", withConfiguration: scale)
         if likeButton.currentImage != heartImage {
             likeButton.setImage(heartImage, for: .normal)
-            delegate?.didDisLikeImage(id: item.id)
+            delegate?.didDisLikeImage(id: hit.id)
         } else {
             likeButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: scale), for: .normal)
-            delegate?.didLikeImage(id: item.id)
+            delegate?.didLikeImage(id: hit.id)
         }
     }
 }

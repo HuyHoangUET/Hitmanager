@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import RealmSwift
+import Nuke
 
 class HitCollectionViewCell: UICollectionViewCell {
     // MARK: - outlet
@@ -15,8 +15,7 @@ class HitCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var likeButton: UIButton!
     
     weak var delegate: HitCollectionViewDelegate?
-    let loadingIndicator = UIActivityIndicatorView()
-    var item = Item()
+    var hit = Hit()
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -24,23 +23,11 @@ class HitCollectionViewCell: UICollectionViewCell {
         likeButton.setImage(nil, for: .normal)
     }
     
-    func setImageForCell(image: UIImage, id: Int, url: String, imageWidth: CGFloat, imageHeight: CGFloat, userImageUrl: String, username: String) {
-        imageView.image = image
-        self.item.id = id
-        self.item.imageURL = url
-        self.item.imageWidth = imageWidth
-        self.item.imageHeight = imageHeight
-        self.item.userImageUrl = userImageUrl
-        self.item.username = username
-    }
-    
-    func showLoadingIndicator() {
-        loadingIndicator.hidesWhenStopped = true
-        loadingIndicator.center = imageView.center
-        loadingIndicator.style = .medium
-        loadingIndicator.color = .white
-        imageView.addSubview(loadingIndicator)
-        loadingIndicator.startAnimating()
+    func setImage() {
+        let options = ImageLoadingOptions(
+            placeholder: UIImage(named: "placeholder")
+            )
+        Nuke.loadImage(with: URL(string: hit.imageURL)!, options: options, into: imageView)
     }
     
     func handleLikeButton(indexPath: IndexPath, hitId: Int) {
@@ -57,10 +44,10 @@ class HitCollectionViewCell: UICollectionViewCell {
         let heartImage = UIImage(systemName: "heart.fill")
         if sender.currentImage == heartImage {
             sender.setImage(UIImage(systemName: "heart"), for: .normal)
-            delegate?.didDisLikeImage(id: item.id)
+            delegate?.didDisLikeImage(id: hit.id)
         } else {
             sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-            delegate?.didLikeImage(id: item.id, url: item.imageURL, imageWidth: item.imageWidth, imageHeight: item.imageHeight, userImageUrl: item.userImageUrl, username: item.username)
+            delegate?.didLikeImage(hit: hit)
             
         }
     }

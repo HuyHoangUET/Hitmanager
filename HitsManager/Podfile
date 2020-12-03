@@ -9,5 +9,6 @@ target 'HitsManager' do
   pod 'Alamofire'
   pod 'AlamofireImage'
   pod 'RealmSwift'
+  pod 'Nuke'
 
 end

@@ -13,14 +13,14 @@ class UserTableViewController: UIViewController {
     // MARK: - outlet
     @IBOutlet weak var hitTableView: UITableView!
     
-    private var didLikeHits: [DidLikeHit] = []
+    private var didLikeHits: [Hit] = []
     var userViewModel: UserViewModel?
     var didDislikeImagesId: Set<Int> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        didLikeHits = DidLikeHit.getListDidLikeHit()
+        didLikeHits = userViewModel?.getDidLikeHit(didLikeHits: DidLikeHit.getListDidLikeHit()) ?? []
         hitTableView.register(UINib.init(nibName: "TableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
         scrollToRow()
     }
@@ -28,8 +28,10 @@ class UserTableViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        let newDidLikeHits = DidLikeHit.getListDidLikeHit()
-        if didLikeHits != newDidLikeHits {
+        let newDidLikeHits = userViewModel?.getDidLikeHit(didLikeHits: DidLikeHit.getListDidLikeHit()) ?? []
+        let setDidLikeHits = Set(didLikeHits)
+        let setNewDidLikeHits = Set(newDidLikeHits)
+        if setDidLikeHits != setNewDidLikeHits {
             didLikeHits = newDidLikeHits
             hitTableView.reloadData()
         }
@@ -67,22 +69,21 @@ extension UserTableViewController {
         }
         guard let cell = hitTableView.dequeueReusableCell(withIdentifier: "cell") as? HitTableViewCell else { return HitTableViewCell()}
         guard let hit = didLikeHits[safeIndex: indexPath.row] else {return HitTableViewCell()}
-        cell.setItem(hit: hit)
+        cell.hit = Hit(id: hit.id,
+                       imageUrl: hit.imageURL,
+                       imageWidth: CGFloat(hit.imageWidth),
+                       imageHeight: CGFloat(hit.imageHeight),
+                       userImageUrl: hit.userImageUrl,
+                       username: hit.username)
         cell.setHeightOfHitImageView(imageWidth: CGFloat(hit.imageWidth), imageHeight: CGFloat(hit.imageHeight))
         cell.delegate = self
         cell.handleLikeButton(hit: hit, didDislikeImagesId: didDislikeImagesId)
         
         // user imageview
-        self.userViewModel?.dataManager.getImage(url: didLikeHits[indexPath.row].userImageUrl) { (image) in
-            cell.setImageForUserImageView(image: image)
-            cell.setBoundsToUserImage()
-            cell.usernameLabel.text = self.didLikeHits[indexPath.row].username
-        }
+        cell.setImageForUserView()
         
         // hit imageview
-        self.userViewModel?.dataManager.getImage(url: hit.url) { (image) in
-            cell.setImageForHitImageView(image: image)
-        }
+        cell.setImageForHitImageView()
         return cell
     }
 }

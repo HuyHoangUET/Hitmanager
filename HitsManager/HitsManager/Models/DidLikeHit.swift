@@ -51,17 +51,6 @@ class DidLikeHit: Object {
         }
     }
     
-    static func deleteAll() {
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.delete(realm.objects(self))
-            }
-        } catch {
-            print("")
-        }
-    }
-    
     static func getListId() -> Set<Int> {
         do {
             let realm = try Realm()
