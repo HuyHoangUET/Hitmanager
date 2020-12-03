@@ -39,7 +39,7 @@ class ViewController: UIViewController {
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        viewModel.hits.count
+        return viewModel.hits.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -104,7 +104,7 @@ extension ViewController: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView,
                         prefetchItemsAt indexPaths: [IndexPath]) {
         viewModel.getHitsInNextPage(indexPaths: indexPaths) { (hits) in
-            collectionView.reloadItems(at: indexPaths)
+            collectionView.reloadData()
         }
     }
 }

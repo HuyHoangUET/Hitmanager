@@ -47,6 +47,7 @@ class HitTableViewCell: UITableViewCell {
         let options = ImageLoadingOptions(
             placeholder: UIImage(named: "placeholder")
             )
+        guard hit.imageURL != "" else { return }
         Nuke.loadImage(with: URL(string: hit.imageURL)!, options: options, into: hitImageView)
     }
     
@@ -56,6 +57,10 @@ class HitTableViewCell: UITableViewCell {
         let options = ImageLoadingOptions(
             placeholder: UIImage(systemName: "person.circle")
             )
+        guard hit.userImageUrl != "" else {
+            userImageView.image = UIImage(systemName: "person.circle")
+            return
+        }
         let request = ImageRequest(url: URL(string: hit.userImageUrl)!,
                                    processors: [ImageProcessors.Circle()])
         Nuke.loadImage(with: request, options: options, into: userImageView)
