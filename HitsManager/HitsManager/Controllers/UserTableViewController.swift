@@ -72,12 +72,7 @@ extension UserTableViewController {
             return HitTableViewCell()
         }
         guard let hit = didLikeHits[safeIndex: indexPath.row] else {return HitTableViewCell()}
-        cell.hit = Hit(id: hit.id,
-                       imageUrl: hit.imageURL,
-                       imageWidth: CGFloat(hit.imageWidth),
-                       imageHeight: CGFloat(hit.imageHeight),
-                       userImageUrl: hit.userImageUrl,
-                       username: hit.username)
+        cell.hit = hit
         cell.setHeightOfHitImageView(imageWidth: CGFloat(hit.imageWidth),
                                      imageHeight: CGFloat(hit.imageHeight))
         cell.delegate = self
@@ -97,9 +92,9 @@ extension UserTableViewController {
         DispatchQueue.main.async {
             guard self.userViewModel != nil else { return }
             if self.userViewModel!.isDisplayCellAtChosenIndexPath {
-                self.hitTableView.scrollToRow(at: self.userViewModel?.chosenIndexPath ?? IndexPath(),
+                self.hitTableView.scrollToRow(at: self.userViewModel!.chosenIndexPath,
                                               at: .top,
-                                              animated: true)
+                                              animated: false)
                 self.userViewModel!.isDisplayCellAtChosenIndexPath = false
             }
         }
