@@ -21,9 +21,7 @@ class ViewModel {
         let url = apiURL + "&page=\(curentPage)"
         dataManager.get(url: url) {[weak self] data in
             do {
-                print(url)
                 let result = try JSONDecoder().decode(Result.self, from: data)
-                print("\(result)")
                 self?.hits += result.hits
                 completion(self?.hits ?? [])
             } catch {

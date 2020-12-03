@@ -13,7 +13,7 @@ class UserViewModel {
     var chosenIndexPath = IndexPath()
     var isDisplayCellAtChosenIndexPath = true
     
-    func getDidLikeHit(didLikeHits: Set<DidLikeHit>) -> [Hit] {
+    func getDidLikeHit(didLikeHits: [DidLikeHit]) -> [Hit] {
         var hits: [Hit] = []
         for didLikeHit in didLikeHits {
             let hit = Hit(id: didLikeHit.id,

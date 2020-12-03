@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import RealmSwift
+import Nuke
 
 class HitCollectionViewCell: UICollectionViewCell {
     // MARK: - outlet
@@ -15,7 +15,6 @@ class HitCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var likeButton: UIButton!
     
     weak var delegate: HitCollectionViewDelegate?
-    let loadingIndicator = UIActivityIndicatorView()
     var hit = Hit()
     
     override func prepareForReuse() {
@@ -25,20 +24,10 @@ class HitCollectionViewCell: UICollectionViewCell {
     }
     
     func setImage() {
-        let imageManager = ImageManager()
-        imageManager.getImageForCell(hit: hit) { image in
-            self.imageView.image = image
-            self.loadingIndicator.stopAnimating()
-        }
-    }
-    
-    func showLoadingIndicator() {
-        loadingIndicator.hidesWhenStopped = true
-        loadingIndicator.center = imageView.center
-        loadingIndicator.style = .medium
-        loadingIndicator.color = .white
-        imageView.addSubview(loadingIndicator)
-        loadingIndicator.startAnimating()
+        let options = ImageLoadingOptions(
+            placeholder: UIImage(named: "placeholder")
+            )
+        Nuke.loadImage(with: URL(string: hit.imageURL)!, options: options, into: imageView)
     }
     
     func handleLikeButton(indexPath: IndexPath, hitId: Int) {

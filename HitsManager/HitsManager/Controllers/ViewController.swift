@@ -129,7 +129,6 @@ extension ViewController {
     func initHitCollectionViewCell(indexPath: IndexPath) -> HitCollectionViewCell {
         guard let hit = viewModel.hits[safeIndex: indexPath.row] else { return HitCollectionViewCell()}
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? HitCollectionViewCell else { return HitCollectionViewCell()}
-        cell.showLoadingIndicator()
         cell.delegate = self
         guard let hitId = viewModel.hits[safeIndex: indexPath.row]?.id else { return HitCollectionViewCell() }
         cell.handleLikeButton(indexPath: indexPath, hitId: hitId)

@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Nuke
 
 class HitTableViewCell: UITableViewCell {
     
@@ -21,7 +22,6 @@ class HitTableViewCell: UITableViewCell {
     weak var delegate: UserTableViewCellDelegate?
     private let scale = UIImage.SymbolConfiguration(scale: .large)
     var hit = Hit()
-    private let imageManager = ImageManager()
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -44,20 +44,23 @@ class HitTableViewCell: UITableViewCell {
     }
     
     func setImageForHitImageView() {
-        imageManager.getImageForCell(hit: hit) { image in
-            self.hitImageView.image = image
-        }
+        let options = ImageLoadingOptions(
+            placeholder: UIImage(named: "placeholder")
+            )
+        Nuke.loadImage(with: URL(string: hit.imageURL)!, options: options, into: hitImageView)
     }
     
     func setImageForUserView() {
         usernameLabel.text = hit.username
         setBoundsToUserImage()
-        imageManager.getImageForCell(hit: hit) { image in
-            self.userImageView.image = image
-        }
+        let options = ImageLoadingOptions(
+            placeholder: UIImage(systemName: "person.circle")
+            )
+        let request = ImageRequest(url: URL(string: hit.userImageUrl)!, processors: [ImageProcessors.Circle()])
+        Nuke.loadImage(with: request, options: options, into: userImageView)
     }
     
-    func handleLikeButton(hit: DidLikeHit, didDislikeImagesId: Set<Int>) {
+    func handleLikeButton(hit: Hit, didDislikeImagesId: Set<Int>) {
         if didDislikeImagesId.isSuperset(of: [hit.id]){
             likeButton.setImage(UIImage(systemName: "heart", withConfiguration: scale), for: .normal)
         } else {

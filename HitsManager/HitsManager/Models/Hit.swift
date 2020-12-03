@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct Hit: Decodable {
+struct Hit: Decodable, Hashable {
     var id: Int
     var imageURL: String
     var imageWidth: CGFloat
