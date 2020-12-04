@@ -24,7 +24,6 @@ class ViewController: UIViewController {
                                 forCellWithReuseIdentifier: "cell")
         
         viewModel.getHitsByPage() { (hits) in
-            print("did get hits")
             self.collectionView.reloadData()
         }
     }
