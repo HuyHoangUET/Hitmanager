@@ -78,10 +78,11 @@ class HitTableViewCell: UITableViewCell {
         let heartImage = UIImage(systemName: "heart", withConfiguration: scale)
         if likeButton.currentImage != heartImage {
             likeButton.setImage(heartImage, for: .normal)
+            likeButton.tintColor = .black
             delegate?.didDisLikeImage(id: hit.id)
         } else {
             likeButton.setImage(UIImage(systemName: "heart.fill", withConfiguration: scale), for: .normal)
-            likeButton.tintColor = .black
+            likeButton.tintColor = .red
             delegate?.didLikeImage(id: hit.id)
         }
     }
